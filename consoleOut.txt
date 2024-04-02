@@ -1,0 +1,19 @@
+gradle build run
+
+> Task :runBuild
+22:02.336 INFO class:RunEdgeConvert - App starting
+22:12.481 INFO class:EdgeConvertFileParser - Parsing edge file.
+22:12.492 INFO class:EdgeConvertFileParser - Completed edge file parsing.
+22:55.375 INFO class:EdgeConvertCreateDDL - Generating DB MySQLDB
+23:10.913 INFO class:EdgeConvertGUI - Saving SQL statements
+23:10.914 INFO class:EdgeConvertGUI - File saved
+23:20.934 INFO class:EdgeConvertGUI - Exiting app.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.7/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.        
+
+BUILD SUCCESSFUL in 1m 20s
+6 actionable tasks: 1 executed, 5 up-to-date

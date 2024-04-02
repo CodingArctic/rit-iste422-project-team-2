@@ -1,0 +1,15 @@
+EdgeConvert Save File
+#Tables#
+Table: 1
+{
+TableName: TEST
+NativeFields: 2|3|4|5
+RelatedTables: 
+RelatedFields: 0|0|0|0
+}
+
+#Fields#
+2|TestVarchar|1|0|0|0|16|false|false|testVarchar
+3|TestBoolean|1|0|0|1|1|false|false|true
+4|TestInteger|1|0|0|2|1|false|false|1234
+5|TestDouble|1|0|0|3|1|false|false|1.234
