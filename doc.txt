@@ -1,0 +1,9 @@
+temporary document to keep track of changes made during refactoring
+
+EdgeTable:
+ - Added generics for lists
+ - improved toString
+ - added joinIntegers() helper method used to 
+    join an int[] elements into a string
+ - simplified makeArrays() method
+ - fixed getRelatedTable() methods and tests
