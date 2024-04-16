@@ -1,137 +1,129 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class EdgeTable {
    private int numFigure;
    private String name;
-   private ArrayList alRelatedTables, alNativeFields;
-   private int[] relatedTables, relatedFields, nativeFields;
-   public static Logger logger = LogManager.getLogger(EdgeTable.class);
-   
+   private List<Integer> relatedTables;
+   private List<Integer> nativeFields;
+   private int[] relatedFields;
+   private static final Logger logger = LogManager.getLogger(EdgeTable.class);
+
    public EdgeTable(String inputString) {
       try {
-      StringTokenizer st = new StringTokenizer(inputString, EdgeConvertFileParser.DELIM);
-      numFigure = Integer.parseInt(st.nextToken());
-      name = st.nextToken();
-      alRelatedTables = new ArrayList();
-      alNativeFields = new ArrayList();
-      logger.debug("EdgeTable initialized, with inputString: " + inputString);
+         StringTokenizer st = new StringTokenizer(inputString, EdgeConvertFileParser.DELIM);
+         numFigure = Integer.parseInt(st.nextToken());
+         name = st.nextToken();
+         relatedTables = new ArrayList<>();
+         nativeFields = new ArrayList<>();
+         logger.debug("EdgeTable initialized, with inputString: " + inputString);
       } catch (Exception exc) {
-         logger.error("EdgeTable constructor failed: " + exc);
+         logger.error("EdgeTable constructor failed: ", exc);
       }
    }
-   
+
    public int getNumFigure() {
       return numFigure;
    }
-   
+
    public String getName() {
       return name;
    }
-   
+
    public void addRelatedTable(int relatedTable) {
       logger.debug("Adding related table " + relatedTable);
-      alRelatedTables.add(Integer.valueOf(relatedTable));
-   }
-   
-   public int[] getRelatedTablesArray() {
-      return relatedTables;
-   }
-   
-   public int[] getRelatedFieldsArray() {
-      return relatedFields;
-   }
-   
-   public void setRelatedField(int index, int relatedValue) {
-      logger.debug("Adding related field " + relatedValue + " at " + index);
-      relatedFields[index] = relatedValue;
-   }
-   
-   public int[] getNativeFieldsArray() {
-      return nativeFields;
-   }
+       relatedTables.add(relatedTable);
+    }
 
-   public void addNativeField(int value) {
-      logger.debug("Adding native field " + value);
-      alNativeFields.add(Integer.valueOf(value));
-   }
+    public int[] getRelatedTablesArray() {
+         return relatedTables.stream().mapToInt(Integer::intValue).toArray();
+      }
 
-   public void moveFieldUp(int index) { //move the field closer to the beginning of the list
-      if (index == 0) {
-         return;
+      public int[] getRelatedFieldsArray() {
+         return relatedFields;
       }
-      int tempNative = nativeFields[index - 1]; //save element at destination index
-      nativeFields[index - 1] = nativeFields[index]; //copy target element to destination
-      nativeFields[index] = tempNative; //copy saved element to target's original location
-      int tempRelated = relatedFields[index - 1]; //save element at destination index
-      relatedFields[index - 1] = relatedFields[index]; //copy target element to destination
-      relatedFields[index] = tempRelated; //copy saved element to target's original location
-      logger.debug("EdgeTable Field moved up by " + index);
-   }
-   
-   public void moveFieldDown(int index) { //move the field closer to the end of the list
-      if (index == (nativeFields.length - 1)) {
-         return;
-      }
-      int tempNative = nativeFields[index + 1]; //save element at destination index
-      nativeFields[index + 1] = nativeFields[index]; //copy target element to destination
-      nativeFields[index] = tempNative; //copy saved element to target's original location
-      int tempRelated = relatedFields[index + 1]; //save element at destination index
-      relatedFields[index + 1] = relatedFields[index]; //copy target element to destination
-      relatedFields[index] = tempRelated; //copy saved element to target's original location
-      logger.debug("EdgeTable Field moved down by " + index);
-   }
 
-   public void makeArrays() { //convert the ArrayLists into int[]
-      Integer[] temp;
-      temp = (Integer[])alNativeFields.toArray(new Integer[alNativeFields.size()]);
-      nativeFields = new int[temp.length];
-      for (int i = 0; i < temp.length; i++) {
-         nativeFields[i] = temp[i].intValue();
+      public void setRelatedField(int index, int relatedValue) {
+         logger.debug("Adding related field " + relatedValue + " at " + index);
+         relatedFields[index] = relatedValue;
       }
-      
-      temp = (Integer[])alRelatedTables.toArray(new Integer[alRelatedTables.size()]);
-      relatedTables = new int[temp.length];
-      for (int i = 0; i < temp.length; i++) {
-         relatedTables[i] = temp[i].intValue();
-      }
-      
-      relatedFields = new int[nativeFields.length];
-      for (int i = 0; i < relatedFields.length; i++) {
-         relatedFields[i] = 0;
-      }
-      logger.debug("Converted ArrayList into int[]");
-   }
 
-   public String toString() {
-      StringBuffer sb = new StringBuffer();
-      sb.append("Table: " + numFigure + "\r\n");
-      sb.append("{\r\n");
-      sb.append("TableName: " + name + "\r\n");
-      sb.append("NativeFields: ");
-      for (int i = 0; i < nativeFields.length; i++) {
-         sb.append(nativeFields[i]);
-         if (i < (nativeFields.length - 1)){
-            sb.append(EdgeConvertFileParser.DELIM);
+      public int[] getNativeFieldsArray() {
+        return nativeFields.stream().mapToInt(Integer::intValue).toArray();
+     }
+
+     public void addNativeField(int value) {
+        logger.debug("Adding native field " + value);
+       nativeFields.add(value);
+    }
+
+    public void moveFieldUp(int index) {
+       if (index == 0) {
+          return;
+       }
+       swapFields(index, index - 1);
+       logger.debug("EdgeTable Field moved up by " + index);
+    }
+
+     public void moveFieldDown(int index) {
+        if (index == nativeFields.size() - 1) {
+           return;
+        }
+       swapFields(index, index + 1);
+       logger.debug("EdgeTable Field moved down by " + index);
+    }
+
+     private void swapFields(int index1, int index2) {
+        int tempNative = nativeFields.get(index1);
+        nativeFields.set(index1, nativeFields.get(index2));
+        nativeFields.set(index2, tempNative);
+
+       int tempRelated = relatedFields[index1];
+       relatedFields[index1] = relatedFields[index2];
+       relatedFields[index2] = tempRelated;
+    }
+
+     public void makeArrays() {
+        relatedFields = new int[nativeFields.size()];
+        logger.debug("Converted ArrayList into int[]");
+     }
+
+    @Override
+     public String toString() {
+       StringBuilder sb = new StringBuilder();
+       sb.append("Table: ").append(numFigure).append("\r\n");
+       sb.append("{\r\n");
+       sb.append("TableName: ").append(name).append("\r\n");
+       sb.append("NativeFields: ").append(joinIntegers(nativeFields)).append("\r\n");
+       sb.append("RelatedTables: ").append(joinIntegers(relatedTables)).append("\r\n");
+       sb.append("RelatedFields: ").append(joinIntegers(relatedFields)).append("\r\n");
+       sb.append("}\r\n");
+
+       return sb.toString();
+    }
+
+    private String joinIntegers(List<Integer> list) {
+       StringBuilder result = new StringBuilder();
+       for (int i = 0; i < list.size(); i++) {
+          result.append(list.get(i));
+          if (i < list.size() - 1) {
+             result.append(EdgeConvertFileParser.DELIM);
+          }
          }
+         return result.toString();
       }
-      sb.append("\r\nRelatedTables: ");
-      for (int i = 0; i < relatedTables.length; i++) {
-         sb.append(relatedTables[i]);
-         if (i < (relatedTables.length - 1)){
-            sb.append(EdgeConvertFileParser.DELIM);
+
+      private String joinIntegers(int[] array) {
+         StringBuilder result = new StringBuilder();
+         for (int i = 0; i < array.length; i++) {
+            result.append(array[i]);
+            if (i < array.length - 1) {
+               result.append(EdgeConvertFileParser.DELIM);
+            }
          }
-      }
-      sb.append("\r\nRelatedFields: ");
-      for (int i = 0; i < relatedFields.length; i++) {
-         sb.append(relatedFields[i]);
-         if (i < (relatedFields.length - 1)){
-            sb.append(EdgeConvertFileParser.DELIM);
-         }
-      }
-      sb.append("\r\n}\r\n");
-      
-      return sb.toString();
-   }
+        return result.toString();
+     }
 }
