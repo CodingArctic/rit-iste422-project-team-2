@@ -85,7 +85,6 @@ public class EdgeTableTest {
         assertEquals("Name of testObj4 should be 'TestTable'", "TestTable", testObj4.getName());
     }
 
-    // THIS TEST NEEDS TO BE FIXED, EXPECTED VALUES SHOULD BE +1
     @Test
     public void testAddRelatedTable() {
         testObj1.addRelatedTable(3);
@@ -93,17 +92,16 @@ public class EdgeTableTest {
         testObj3.addRelatedTable(1);
         testObj4.addRelatedTable(3);
 
-        assertEquals("Length of related tables array in testObj1 should be equal to 3", 2,
+        assertEquals("Length of related tables array in testObj1 should be equal to 3", 3,
                 testObj1.getRelatedTablesArray().length);
-        assertEquals("Length of related tables array in testObj2 should be equal to 4", 3,
+        assertEquals("Length of related tables array in testObj2 should be equal to 4", 4,
                 testObj2.getRelatedTablesArray().length);
-        assertEquals("Length of related tables array in testObj3 should be equal to 1", 0,
+        assertEquals("Length of related tables array in testObj3 should be equal to 1", 1,
                 testObj3.getRelatedTablesArray().length);
-        assertEquals("Length of related tables array in testObj4 should be equal to 3", 2,
+        assertEquals("Length of related tables array in testObj4 should be equal to 3", 3,
                 testObj4.getRelatedTablesArray().length);
     }
 
-    // THIS TEST NEEDS TO BE FIXED, EXPECTED VALUES SHOULD BE +1
     @Test
     public void testAddNativeField() {
         testObj1.addNativeField(3);
@@ -111,13 +109,13 @@ public class EdgeTableTest {
         testObj3.addNativeField(1);
         testObj4.addNativeField(5);
 
-        assertEquals("Length of native fields array in testObj1 should be equal to 3", 2,
+        assertEquals("Length of native fields array in testObj1 should be equal to 3", 3,
                 testObj1.getNativeFieldsArray().length);
-        assertEquals("Length of native fields array in testObj2 should be equal to 2", 1,
+        assertEquals("Length of native fields array in testObj2 should be equal to 2", 2,
                 testObj2.getNativeFieldsArray().length);
-        assertEquals("Length of native fields array in testObj3 should be equal to 1", 0,
+        assertEquals("Length of native fields array in testObj3 should be equal to 1", 1,
                 testObj3.getNativeFieldsArray().length);
-        assertEquals("Length of native fields array in testObj4 should be equal to 5", 4,
+        assertEquals("Length of native fields array in testObj4 should be equal to 5", 5,
                 testObj4.getNativeFieldsArray().length);
     }
 

@@ -5,8 +5,9 @@ import javax.swing.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
+
 public class EdgeConvertFileParser {
-   //private String filename = "test.edg";
    private File parseFile;
    private FileReader fr;
    private BufferedReader br;
@@ -18,11 +19,9 @@ public class EdgeConvertFileParser {
    private EdgeConnector[] connectors;
    private String style;
    private String text;
-   private String tableName;
-   private String fieldName;
-   private boolean isEntity, isAttribute, isUnderlined = false;
-   private int numFigure, numConnector, numFields, numTables, numNativeRelatedFields;
+   private int numFigure, numConnector, numFields, numTables;
    private int endPoint1, endPoint2;
+   @SuppressWarnings("unused")
    private int numLine;
    private String endStyle1, endStyle2;
    public static final String EDGE_ID = "EDGE Diagram File"; //first line of .edg files should be this
@@ -37,8 +36,6 @@ public class EdgeConvertFileParser {
       alTables = new ArrayList();
       alFields = new ArrayList();
       alConnectors = new ArrayList();
-      isEntity = false;
-      isAttribute = false;
       parseFile = constructorFile;
       numLine = 0;
       this.openFile(parseFile);
@@ -49,6 +46,8 @@ public class EdgeConvertFileParser {
    }
 
    public void parseEdgeFile() throws IOException {
+      boolean isEntity = false, isAttribute = false, isUnderlined = false;
+
       logger.info("Parsing edge file.");
       while ((currentLine = br.readLine()) != null) {
          currentLine = currentLine.trim();
@@ -211,8 +210,11 @@ public class EdgeConvertFileParser {
    } // resolveConnectors()
    
    public void parseSaveFile() throws IOException { //this method is unclear and confusing in places
+      String fieldName;
+      String tableName;
+
       logger.debug("Initializing parseSaveFile()");
-      StringTokenizer stTables, stNatFields, stRelFields, stNatRelFields, stField;
+      StringTokenizer stTables, stNatFields, stRelFields, stField;
       EdgeTable tempTable;
       EdgeField tempField;
       currentLine = br.readLine();
@@ -327,10 +329,12 @@ public class EdgeConvertFileParser {
       } // try
       catch (FileNotFoundException fnfe) {
          logger.error("Cannot find \"" + inputFile.getName() + "\".");
+         JOptionPane.showMessageDialog(null, "Could not find " + inputFile.getName());
          System.exit(0);
       } // catch FileNotFoundException
       catch (IOException ioe) {
          logger.error(ioe);
+         JOptionPane.showMessageDialog(null, "An internal error has occurred, please check logs.");
          System.exit(0);
       } // catch IOException
       logger.debug("Completed openFile()");

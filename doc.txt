@@ -1,0 +1,20 @@
+temporary document to keep track of changes made during refactoring
+
+EdgeTable:
+ - Added generics for lists
+ - improved toString
+ - added joinIntegers() helper method used to 
+    join an int[] elements into a string
+ - simplified makeArrays() method
+ - fixed getRelatedTable() methods and tests
+
+ EdgeConvertFileParser:
+ - added message dialog before system.exit()
+ - moved "single use" variables inside methods including: fieldName, tableName, isEntity, isAttribute, isUnderlined
+ - removed unused numNativeRelatedFields, stNatRelFields
+
+ CreateDDLMySQL:
+ - removed unused imports
+
+  EdgeConvertGUI:
+ - removed unused import
